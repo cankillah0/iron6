@@ -1,0 +1,15 @@
+{
+"frames": {
+	"301.png": {
+		"frame": {"x":0, "y":0, "w":1262, "h":760},
+		"spriteSourceSize": {"x":0,"y":0,"w":1262,"h":760},
+		"sourceSize": {"w":1262,"h":760}
+	}
+
+},
+"meta": {
+	"image": "back.png",
+	"size": {"w": 1263, "h": 1263},
+	"scale": "1"
+}
+}

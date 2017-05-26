@@ -1,0 +1,295 @@
+{
+"frames": {
+	"dude_1 (100).png": {
+		"frame": {"x":307, "y":510, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (101).png": {
+		"frame": {"x":307, "y":0, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (102).png": {
+		"frame": {"x":0, "y":2550, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (103).png": {
+		"frame": {"x":0, "y":2040, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (104).png": {
+		"frame": {"x":0, "y":1530, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (105).png": {
+		"frame": {"x":0, "y":1020, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (106).png": {
+		"frame": {"x":0, "y":510, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (107).png": {
+		"frame": {"x":0, "y":0, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (108).png": {
+		"frame": {"x":1228, "y":2040, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (109).png": {
+		"frame": {"x":2763, "y":510, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (110).png": {
+		"frame": {"x":2763, "y":0, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (111).png": {
+		"frame": {"x":2456, "y":2550, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (112).png": {
+		"frame": {"x":2456, "y":2040, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (113).png": {
+		"frame": {"x":2456, "y":1530, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (114).png": {
+		"frame": {"x":2456, "y":1020, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (115).png": {
+		"frame": {"x":2456, "y":510, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (116).png": {
+		"frame": {"x":2456, "y":0, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (117).png": {
+		"frame": {"x":2149, "y":2550, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (118).png": {
+		"frame": {"x":2149, "y":2040, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (119).png": {
+		"frame": {"x":2149, "y":1530, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (120).png": {
+		"frame": {"x":2149, "y":1020, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (64).png": {
+		"frame": {"x":2149, "y":510, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (65).png": {
+		"frame": {"x":2149, "y":0, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (66).png": {
+		"frame": {"x":1842, "y":2550, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (67).png": {
+		"frame": {"x":1842, "y":2040, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (68).png": {
+		"frame": {"x":1842, "y":1530, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (69).png": {
+		"frame": {"x":1842, "y":1020, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (70).png": {
+		"frame": {"x":1842, "y":510, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (71).png": {
+		"frame": {"x":1842, "y":0, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (72).png": {
+		"frame": {"x":1535, "y":2550, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (73).png": {
+		"frame": {"x":1535, "y":2040, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (74).png": {
+		"frame": {"x":1535, "y":1530, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (75).png": {
+		"frame": {"x":1535, "y":1020, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (76).png": {
+		"frame": {"x":1535, "y":510, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (77).png": {
+		"frame": {"x":1535, "y":0, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (78).png": {
+		"frame": {"x":1228, "y":2550, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (79).png": {
+		"frame": {"x":2763, "y":1020, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (80).png": {
+		"frame": {"x":1228, "y":1530, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (81).png": {
+		"frame": {"x":1228, "y":1020, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (82).png": {
+		"frame": {"x":1228, "y":510, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (83).png": {
+		"frame": {"x":1228, "y":0, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (84).png": {
+		"frame": {"x":921, "y":2550, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (85).png": {
+		"frame": {"x":921, "y":2040, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (86).png": {
+		"frame": {"x":921, "y":1530, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (87).png": {
+		"frame": {"x":921, "y":1020, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (88).png": {
+		"frame": {"x":921, "y":510, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (89).png": {
+		"frame": {"x":921, "y":0, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (90).png": {
+		"frame": {"x":614, "y":2550, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (91).png": {
+		"frame": {"x":614, "y":2040, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (92).png": {
+		"frame": {"x":614, "y":1530, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (93).png": {
+		"frame": {"x":614, "y":1020, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (94).png": {
+		"frame": {"x":614, "y":510, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (95).png": {
+		"frame": {"x":614, "y":0, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (96).png": {
+		"frame": {"x":307, "y":2550, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (97).png": {
+		"frame": {"x":307, "y":2040, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (98).png": {
+		"frame": {"x":307, "y":1530, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	},
+	"dude_1 (99).png": {
+		"frame": {"x":307, "y":1020, "w":306, "h":509},
+		"spriteSourceSize": {"x":0,"y":1,"w":306,"h":510},
+		"sourceSize": {"w":306,"h":510}
+	}
+
+},
+"meta": {
+	"image": "dude_1_2.png",
+	"size": {"w": 3070, "h": 3070},
+	"scale": "1"
+}
+}
