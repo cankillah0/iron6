@@ -73,11 +73,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="56" lean-forward="true" selection-start-line="12" selection-start-column="56" selection-end-line="12" selection-end-column="56" />
+            <state relative-caret-position="391">
+              <caret line="23" column="58" lean-forward="false" selection-start-line="23" selection-start-column="58" selection-end-line="23" selection-end-column="58" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AppView.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/src/AppView.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1088">
+              <caret line="76" column="10" lean-forward="false" selection-start-line="76" selection-start-column="10" selection-end-line="76" selection-end-column="10" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="icon_animations_4.json" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/img/icon_animations_4.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-3139">
+              <caret line="16" column="6" lean-forward="true" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -89,28 +109,6 @@
             <state relative-caret-position="306">
               <caret line="23" column="12" lean-forward="false" selection-start-line="23" selection-start-column="12" selection-end-line="23" selection-end-column="12" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SpinStartState.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/src/states/SpinStartState.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="16" column="47" lean-forward="false" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="InfoButton.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/src/components/buttons/InfoButton.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="8" column="27" lean-forward="false" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
-              <folding>
-                <element signature="e#41#73#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -209,7 +207,6 @@
         <option value="$PROJECT_DIR$/js/src/components/ServiceProxy.js" />
         <option value="$PROJECT_DIR$/js/src/states/WinAnimationState.js" />
         <option value="$PROJECT_DIR$/js/src/components/Reels.js" />
-        <option value="$PROJECT_DIR$/js/src/AppView.js" />
         <option value="$PROJECT_DIR$/js/src/AppProxy.js" />
         <option value="$PROJECT_DIR$/js/src/components/Lines.js" />
         <option value="$PROJECT_DIR$/js/src/components/IconAnimation.js" />
@@ -227,6 +224,7 @@
         <option value="$PROJECT_DIR$/js/src/components/AssetsManager.js" />
         <option value="$PROJECT_DIR$/js/src/core/Renderer.js" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/js/src/AppView.js" />
       </list>
     </option>
   </component>
@@ -313,7 +311,7 @@
     <property name="JavaScriptPreferStrict" value="false" />
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
     <property name="javascript.nodejs.core.library.configured.version" value="4.8.2" />
-    <property name="SearchEverywhereHistoryKey" value="Render&#9;FILE&#9;file://C:/Users/me/WebstormProjects/iron6/js/src/core/Renderer.js&#10;WinTe&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/WinText.js&#10;SpinS&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/SpinStopState.js&#10;Bet&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/BetPanel.js&#10;AppM&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/AppModel.js&#10;Wint&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/WinText.js&#10;Asse&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/AssetsManager.js&#10;Bott&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/BottomPanel.js&#10;Icon&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IconAnimation.js&#10;IconAn&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IconAnimations.js&#10;Frame&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Frames.js&#10;Reel&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ReelJoint.js&#10;Ligh&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/LightPanel.js&#10;Lightn&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Lightning.js&#10;IconAnima&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IconAnimation.js&#10;WinA&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/WinAnimationState.js&#10;ConS&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Constants.js&#10;IconA&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IconAnimation.js&#10;AppP&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/AppProxy.js&#10;Lines&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Lines.js&#10;AppVi&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/AppView.js&#10;Reels&#9;null&#9;null&#10;Fra&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Frames.js&#10;ServiceP&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ServiceProxy.js&#10;Frames&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Frames.js&#10;Asset&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/AssetsManager.js&#10;Ren&#9;null&#9;null&#10;LightCo&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/LightComponent.js&#10;Cons&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Constants.js&#10;Du&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IronDudes.js&#10;Lightni&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Lightning.js&#10;IronD&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IronDude.js&#10;SpinStart&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/SpinStartState.js&#10;Init&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/InitState.js&#10;App&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/AppModel.js&#10;ReelJ&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ReelJoint.js&#10;LightBu&#9;null&#9;null&#10;Light&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/LightPanel.js&#10;iNIT&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/InitState.js&#10;InitS&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/InitState.js&#10;StateM&#9;null&#9;null&#10;Ser&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ServiceProxy.js&#10;Service&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ServiceProxy.js&#10;Servi&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ServiceProxy.js&#10;LightCom&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/LightComponent.js&#10;StopBu&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/buttons/StopButton.js&#10;SpinB&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/buttons/SpinButton.js&#10;Spinb&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/buttons/SpinButton.js&#10;Slider&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Slider.js&#10;Display&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/core/DisplayObject.js" />
+    <property name="SearchEverywhereHistoryKey" value="AppVi&#9;FILE&#9;file://C:/Users/me/WebstormProjects/iron6/js/src/AppView.js&#10;Render&#9;FILE&#9;file://C:/Users/me/WebstormProjects/iron6/js/src/core/Renderer.js&#10;WinTe&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/WinText.js&#10;SpinS&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/SpinStopState.js&#10;Bet&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/BetPanel.js&#10;AppM&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/AppModel.js&#10;Wint&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/WinText.js&#10;Asse&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/AssetsManager.js&#10;Bott&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/BottomPanel.js&#10;Icon&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IconAnimation.js&#10;IconAn&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IconAnimations.js&#10;Frame&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Frames.js&#10;Reel&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ReelJoint.js&#10;Ligh&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/LightPanel.js&#10;Lightn&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Lightning.js&#10;IconAnima&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IconAnimation.js&#10;WinA&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/WinAnimationState.js&#10;ConS&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Constants.js&#10;IconA&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IconAnimation.js&#10;AppP&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/AppProxy.js&#10;Lines&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Lines.js&#10;Reels&#9;null&#9;null&#10;Fra&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Frames.js&#10;ServiceP&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ServiceProxy.js&#10;Frames&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Frames.js&#10;Asset&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/AssetsManager.js&#10;Ren&#9;null&#9;null&#10;LightCo&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/LightComponent.js&#10;Cons&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Constants.js&#10;Du&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IronDudes.js&#10;Lightni&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Lightning.js&#10;IronD&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/IronDude.js&#10;SpinStart&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/SpinStartState.js&#10;Init&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/InitState.js&#10;App&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/AppModel.js&#10;ReelJ&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ReelJoint.js&#10;LightBu&#9;null&#9;null&#10;Light&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/LightPanel.js&#10;iNIT&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/InitState.js&#10;InitS&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/states/InitState.js&#10;StateM&#9;null&#9;null&#10;Ser&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ServiceProxy.js&#10;Service&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ServiceProxy.js&#10;Servi&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/ServiceProxy.js&#10;LightCom&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/LightComponent.js&#10;StopBu&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/buttons/StopButton.js&#10;SpinB&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/buttons/SpinButton.js&#10;Spinb&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/buttons/SpinButton.js&#10;Slider&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/components/Slider.js&#10;Display&#9;FILE&#9;file://C:/Documents and Settings/Admin/WebstormProjects/untitled12/js/src/core/DisplayObject.js" />
     <property name="settings.editor.splitter.proportion" value="0.24180327" />
   </component>
   <component name="RecentsManager">
@@ -499,12 +497,12 @@
       <workItem from="1495562572437" duration="4504000" />
       <workItem from="1495619252000" duration="8824000" />
       <workItem from="1495699672734" duration="5768000" />
-      <workItem from="1496304555047" duration="1352000" />
+      <workItem from="1496304555047" duration="2087000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="316278000" />
+    <option name="totallyTimeSpent" value="317013000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -518,7 +516,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43870968" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24925224" sideWeight="0.50877196" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21668473" sideWeight="0.5762712" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21668473" sideWeight="0.5762712" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -712,14 +710,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/src/AppView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="52" column="32" lean-forward="false" selection-start-line="52" selection-start-column="32" selection-end-line="52" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/src/states/WinAnimationState.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -744,13 +734,6 @@
     <entry file="file://$PROJECT_DIR$/img/icon_animations_3.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-4320">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/img/icon_animations_4.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2936">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
@@ -945,8 +928,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="56" lean-forward="true" selection-start-line="12" selection-start-column="56" selection-end-line="12" selection-end-column="56" />
+        <state relative-caret-position="391">
+          <caret line="23" column="58" lean-forward="false" selection-start-line="23" selection-start-column="58" selection-end-line="23" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/src/AppView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1088">
+          <caret line="76" column="10" lean-forward="false" selection-start-line="76" selection-start-column="10" selection-end-line="76" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/img/icon_animations_4.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3139">
+          <caret line="16" column="6" lean-forward="true" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
           <folding />
         </state>
       </provider>

@@ -377,8 +377,8 @@ var AppView = exports.AppView = function (_DisplayObject) {
     }, {
         key: 'addIronDude',
         value: function addIronDude() {
-            this.ironDudes = new _IronDudes.IronDudes();
-            this.addChild(this.ironDudes);
+            //this.ironDudes = new IronDudes();
+            //this.addChild(this.ironDudes);
         }
     }]);
 
