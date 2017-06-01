@@ -25,14 +25,14 @@ export class AssetsManager{
             .add("img/lightning.png")
             .add("img/temp.json")
             .add("img/temp.png")
-            .add("img/dude_1_1.json")
-            .add("img/dude_1_1.png")
-            .add("img/dude_1_2.json")
-            .add("img/dude_1_2.png")
-            .add("img/dude_2_1.json")
-            .add("img/dude_2_1.png")
-            .add("img/dude_2_2.json")
-            .add("img/dude_2_2.png")
+            //.add("img/dude_1_1.json")
+            //.add("img/dude_1_1.png")
+            //.add("img/dude_1_2.json")
+            //.add("img/dude_1_2.png")
+            //.add("img/dude_2_1.json")
+            //.add("img/dude_2_1.png")
+            //.add("img/dude_2_2.json")
+            //.add("img/dude_2_2.png")
             .load(this.onAtlasLoaded);
     }
 
@@ -46,10 +46,10 @@ export class AssetsManager{
             PIXI.loader.resources["img/back.json"].textures,
             PIXI.loader.resources["img/lightning.json"].textures,
             PIXI.loader.resources["img/temp.json"].textures,
-            PIXI.loader.resources["img/dude_1_1.json"].textures,
-            PIXI.loader.resources["img/dude_1_2.json"].textures,
-            PIXI.loader.resources["img/dude_2_1.json"].textures,
-            PIXI.loader.resources["img/dude_2_2.json"].textures
+           // PIXI.loader.resources["img/dude_1_1.json"].textures,
+            //PIXI.loader.resources["img/dude_1_2.json"].textures,
+            //PIXI.loader.resources["img/dude_2_1.json"].textures,
+            //PIXI.loader.resources["img/dude_2_2.json"].textures
         );
 
         AppProxy.getInstance().assetsLoadedSignal.dispatch();
