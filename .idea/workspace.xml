@@ -83,17 +83,17 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AppView.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AppView.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/src/AppView.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1088">
-              <caret line="76" column="10" lean-forward="false" selection-start-line="76" selection-start-column="10" selection-end-line="76" selection-end-column="10" />
+            <state relative-caret-position="542">
+              <caret line="75" column="18" lean-forward="false" selection-start-line="75" selection-start-column="18" selection-end-line="75" selection-end-column="18" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="icon_animations_4.json" pinned="false" current-in-tab="true">
+      <file leaf-file-name="icon_animations_4.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/img/icon_animations_4.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-3139">
@@ -497,12 +497,12 @@
       <workItem from="1495562572437" duration="4504000" />
       <workItem from="1495619252000" duration="8824000" />
       <workItem from="1495699672734" duration="5768000" />
-      <workItem from="1496304555047" duration="2087000" />
+      <workItem from="1496304555047" duration="2599000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="317013000" />
+    <option name="totallyTimeSpent" value="317525000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -934,18 +934,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/src/AppView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="76" column="10" lean-forward="false" selection-start-line="76" selection-start-column="10" selection-end-line="76" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/img/icon_animations_4.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3139">
           <caret line="16" column="6" lean-forward="true" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/src/AppView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="542">
+          <caret line="75" column="18" lean-forward="false" selection-start-line="75" selection-start-column="18" selection-end-line="75" selection-end-column="18" />
           <folding />
         </state>
       </provider>

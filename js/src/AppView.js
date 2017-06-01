@@ -74,7 +74,5 @@ export class AppView extends DisplayObject{
     }
 
     addIronDude(){
-        //this.ironDudes = new IronDudes();
-        //this.addChild(this.ironDudes);
     }
 }

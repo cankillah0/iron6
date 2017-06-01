@@ -376,10 +376,7 @@ var AppView = exports.AppView = function (_DisplayObject) {
         }
     }, {
         key: 'addIronDude',
-        value: function addIronDude() {
-            //this.ironDudes = new IronDudes();
-            //this.addChild(this.ironDudes);
-        }
+        value: function addIronDude() {}
     }]);
 
     return AppView;
