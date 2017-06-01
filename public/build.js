@@ -409,21 +409,12 @@ var AssetsManager = exports.AssetsManager = function () {
     }, {
         key: "loadAtlas",
         value: function loadAtlas() {
-            PIXI.loader.add("img/description.json").add("img/atlas.png").add("img/icon_animations_1.json").add("img/icon_animations_1.png").add("img/icon_animations_2.json").add("img/icon_animations_2.png").add("img/icon_animations_3.json").add("img/icon_animations_3.png").add("img/icon_animations_4.json").add("img/icon_animations_4.png").add("img/back.json").add("img/back.png").add("img/lightning.json").add("img/lightning.png").add("img/temp.json").add("img/temp.png")
-            //.add("img/dude_1_1.json")
-            //.add("img/dude_1_1.png")
-            //.add("img/dude_1_2.json")
-            //.add("img/dude_1_2.png")
-            //.add("img/dude_2_1.json")
-            //.add("img/dude_2_1.png")
-            //.add("img/dude_2_2.json")
-            //.add("img/dude_2_2.png")
-            .load(this.onAtlasLoaded);
+            PIXI.loader.add("img/bottom_panel.json").add("img/icon_animations_1.json").add("img/icon_animations_2.json").add("img/icon_animations_3.json").add("img/icon_animations_4.json").add("img/back.json").add("img/lightning.json").add("img/temp.json").load(this.onAtlasLoaded);
         }
     }, {
         key: "onAtlasLoaded",
         value: function onAtlasLoaded() {
-            self.textures = Object.assign({}, PIXI.loader.resources["img/description.json"].textures, PIXI.loader.resources["img/icon_animations_1.json"].textures, PIXI.loader.resources["img/icon_animations_2.json"].textures, PIXI.loader.resources["img/icon_animations_3.json"].textures, PIXI.loader.resources["img/icon_animations_4.json"].textures, PIXI.loader.resources["img/back.json"].textures, PIXI.loader.resources["img/lightning.json"].textures, PIXI.loader.resources["img/temp.json"].textures);
+            self.textures = Object.assign({}, PIXI.loader.resources["img/bottom_panel.json"].textures, PIXI.loader.resources["img/icon_animations_1.json"].textures, PIXI.loader.resources["img/icon_animations_2.json"].textures, PIXI.loader.resources["img/icon_animations_3.json"].textures, PIXI.loader.resources["img/icon_animations_4.json"].textures, PIXI.loader.resources["img/back.json"].textures, PIXI.loader.resources["img/lightning.json"].textures, PIXI.loader.resources["img/temp.json"].textures);
 
             _AppProxy.AppProxy.getInstance().assetsLoadedSignal.dispatch();
         }
