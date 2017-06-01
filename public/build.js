@@ -412,12 +412,21 @@ var AssetsManager = exports.AssetsManager = function () {
     }, {
         key: "loadAtlas",
         value: function loadAtlas() {
-            PIXI.loader.add("img/description.json").add("img/atlas.png").add("img/icon_animations_1.json").add("img/icon_animations_1.png").add("img/icon_animations_2.json").add("img/icon_animations_2.png").add("img/icon_animations_3.json").add("img/icon_animations_3.png").add("img/icon_animations_4.json").add("img/icon_animations_4.png").add("img/back.json").add("img/back.png").add("img/lightning.json").add("img/lightning.png").add("img/temp.json").add("img/temp.png").add("img/dude_1_1.json").add("img/dude_1_1.png").add("img/dude_1_2.json").add("img/dude_1_2.png").add("img/dude_2_1.json").add("img/dude_2_1.png").add("img/dude_2_2.json").add("img/dude_2_2.png").load(this.onAtlasLoaded);
+            PIXI.loader.add("img/description.json").add("img/atlas.png").add("img/icon_animations_1.json").add("img/icon_animations_1.png").add("img/icon_animations_2.json").add("img/icon_animations_2.png").add("img/icon_animations_3.json").add("img/icon_animations_3.png").add("img/icon_animations_4.json").add("img/icon_animations_4.png").add("img/back.json").add("img/back.png").add("img/lightning.json").add("img/lightning.png").add("img/temp.json").add("img/temp.png")
+            //.add("img/dude_1_1.json")
+            //.add("img/dude_1_1.png")
+            //.add("img/dude_1_2.json")
+            //.add("img/dude_1_2.png")
+            //.add("img/dude_2_1.json")
+            //.add("img/dude_2_1.png")
+            //.add("img/dude_2_2.json")
+            //.add("img/dude_2_2.png")
+            .load(this.onAtlasLoaded);
         }
     }, {
         key: "onAtlasLoaded",
         value: function onAtlasLoaded() {
-            self.textures = Object.assign({}, PIXI.loader.resources["img/description.json"].textures, PIXI.loader.resources["img/icon_animations_1.json"].textures, PIXI.loader.resources["img/icon_animations_2.json"].textures, PIXI.loader.resources["img/icon_animations_3.json"].textures, PIXI.loader.resources["img/icon_animations_4.json"].textures, PIXI.loader.resources["img/back.json"].textures, PIXI.loader.resources["img/lightning.json"].textures, PIXI.loader.resources["img/temp.json"].textures, PIXI.loader.resources["img/dude_1_1.json"].textures, PIXI.loader.resources["img/dude_1_2.json"].textures, PIXI.loader.resources["img/dude_2_1.json"].textures, PIXI.loader.resources["img/dude_2_2.json"].textures);
+            self.textures = Object.assign({}, PIXI.loader.resources["img/description.json"].textures, PIXI.loader.resources["img/icon_animations_1.json"].textures, PIXI.loader.resources["img/icon_animations_2.json"].textures, PIXI.loader.resources["img/icon_animations_3.json"].textures, PIXI.loader.resources["img/icon_animations_4.json"].textures, PIXI.loader.resources["img/back.json"].textures, PIXI.loader.resources["img/lightning.json"].textures, PIXI.loader.resources["img/temp.json"].textures);
 
             _AppProxy.AppProxy.getInstance().assetsLoadedSignal.dispatch();
         }
@@ -3636,8 +3645,17 @@ var Renderer = exports.Renderer = function () {
     _createClass(Renderer, [{
         key: 'initialize',
         value: function initialize() {
-            this.renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
+
+            var canvas = document.getElementById('canvas');
+            this.renderer = PIXI.autoDetectRenderer(1262, 760, canvas);
             document.body.appendChild(this.renderer.view);
+            this.renderer.view.style.position = 'absolute';
+            this.renderer.view.style.left = '50%';
+            this.renderer.view.style.top = '50%';
+            this.renderer.view.style.transform = 'translate3d( -50%, -50%, 0 )';
+
+            this.ratio = 1262 / 760;
+
             this._stage = new PIXI.Container();
             this._stage.hitArea = new PIXI.Rectangle(0, 0, 1262, 760);
             this._stage.interactive = true;
@@ -3645,6 +3663,22 @@ var Renderer = exports.Renderer = function () {
             this._onUpdateSignal = new signals.Signal();
             _AppProxy.AppProxy.getInstance().stage = this._stage;
             this.animate();
+
+            window.onresize = this.onWindowResize.bind(this);
+            this.onWindowResize(null);
+        }
+    }, {
+        key: 'onWindowResize',
+        value: function onWindowResize(event) {
+            if (window.innerWidth / window.innerHeight >= this.ratio) {
+                var w = window.innerHeight * this.ratio;
+                var h = window.innerHeight;
+            } else {
+                var w = window.innerWidth;
+                var h = window.innerWidth / this.ratio;
+            }
+            this.renderer.view.style.width = w / 1.2 + 'px';
+            this.renderer.view.style.height = h / 1.2 + 'px';
         }
     }, {
         key: 'animate',
