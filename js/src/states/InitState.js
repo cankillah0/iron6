@@ -26,7 +26,6 @@ export class InitState{
 
     onAssetsLoadComplete(){
         this.assetsLoadComplete = true;
-        new AssetsManager().getDudeTextures();
         if (this.initResponseReceived){
             this.initComplete();
         }

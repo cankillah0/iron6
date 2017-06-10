@@ -34,6 +34,8 @@ export class Lightning extends DisplayObject{
             this.onPanelButtonOut.bind(this));
         AppProxy.getInstance().lightPanel.buttonClickSignal.add(
             this.onPanelButtonClick.bind(this));
+        AppModel.getInstance().reelsFrozenExceedSignal.add(
+            this.onReelsFrozenExceeded.bind(this));
     }
 
     createComponents(){
@@ -68,6 +70,14 @@ export class Lightning extends DisplayObject{
 
     onPanelButtonOut(index){
         this.components[index].hide();
+    }
+
+    onReelsFrozenExceeded(){
+        for (let i = 0; i < this.components.length; i++){
+            if (this.components[i].frozen){
+                this.components[i].unfreeze();
+            }
+        }
     }
 
     onPanelButtonClick(index){

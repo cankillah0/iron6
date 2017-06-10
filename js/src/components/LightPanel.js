@@ -34,9 +34,6 @@ export class LightPanel extends DisplayObject{
 
         AppModel.getInstance().reelsFrozenUpdateSignal.add(
             this.reelsFrozenCountUpdate.bind(this));
-
-        StateMachine.getInstance().stateChangeSignal.add(
-            this.onStateChange.bind(this));
     }
 
     onStateChange(state){
@@ -71,10 +68,11 @@ export class LightPanel extends DisplayObject{
 
     reelsFrozenCountUpdate(){
         let frozenCount = AppModel.getInstance().getFrozenReelsCount();
-        if (frozenCount == Constants.MAX_FROZEN_COUNT){
-            AppProxy.getInstance().lightPanel.lockButtons();
+        let freezeValue = AppModel.getInstance().freezeValue;
+        if (frozenCount == Constants.MAX_FROZEN_COUNT || freezeValue == 0){
+            this.lockButtons();
         } else {
-            AppProxy.getInstance().lightPanel.unlockButtons();
+            this.unlockButtons();
         }
     }
 

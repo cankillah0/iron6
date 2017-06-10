@@ -19,6 +19,7 @@ export class ReelJoint{
     onStateChange(state){
         switch (state.getName())
         {
+            case (Constants.BIG_WIN_STATE):
             case(Constants.WIN_ANIMATION_STATE):
             case(Constants.IDLE_STATE):{
                 clearTimeout(this.timeout);

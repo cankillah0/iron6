@@ -12,6 +12,7 @@ import {Lightning} from './components/Lightning';
 import {Lines} from './components/Lines';
 import {Sparkles} from './components/Sparkles';
 import {IronDudes} from './components/IronDudes';
+import {BigWin} from './components/BigWin'
 import {AppProxy} from './AppProxy';
 
 export class AppView extends DisplayObject{
@@ -30,6 +31,7 @@ export class AppView extends DisplayObject{
         this.addLightning();
         this.addSparkles();
         this.addIronDude();
+        this.addBigwin();
     }
 
     addBottomPanel(){
@@ -73,6 +75,10 @@ export class AppView extends DisplayObject{
         this.addChild(this.sparkles);
     }
 
-    addIronDude(){
+    addBigwin(){
+        this.bigwin = new BigWin();
+        this.addChild(this.bigwin);
     }
+
+    addIronDude(){}
 }

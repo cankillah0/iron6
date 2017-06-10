@@ -1,3 +1,4 @@
-import {AppController} from './src/AppController'
+import {AppController} from './src/AppController';
 let controller = new AppController();
+
 

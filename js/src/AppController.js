@@ -10,7 +10,7 @@ import {Renderer} from './core/Renderer'
 
 export class AppController{
     constructor() {
-        this.initialize();
+        window.onload = this.initialize.bind(this);
     }
 
     initialize(){
@@ -19,5 +19,6 @@ export class AppController{
         StateMachine.getInstance().initialize();
     }
 }
+
 
 

@@ -31,12 +31,16 @@ export class SpinStopState{
     onSpinStopped(){
         clearTimeout(this.timer);
 
+        let state = Constants.IDLE_STATE;
+
         if (AppModel.getInstance().lines.length){
-            StateMachine.getInstance().setState(Constants.WIN_ANIMATION_STATE);
-        } else {
-            StateMachine.getInstance().setState(Constants.IDLE_STATE);
+            state = Constants.WIN_ANIMATION_STATE;
+        }
+        if (AppModel.getInstance().bigwin){
+            state = Constants.BIG_WIN_STATE;
         }
         AppModel.getInstance().updateBalance();
+        StateMachine.getInstance().setState(state);
     }
 
     getName(){

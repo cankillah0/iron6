@@ -8,7 +8,7 @@ var util = require('gulp-util');
 
 gulp.task('default', function(){
     var b = browserify({
-        entries: './js/main.js',
+        entries: './js/src/AppController',
         debug: true,
         transform: [babelify.configure({
             presets: ['es2015']

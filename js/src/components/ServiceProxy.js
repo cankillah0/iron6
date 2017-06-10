@@ -45,7 +45,8 @@ export class ServiceProxy{
     onInitError(){}
 }
 
-ServiceProxy.REQUEST_URL = //"http://localhost:8080/";
-    "http://nodejs-mongo-persistent-test-project-cankillah1.1d35.starter-us-east-1.openshiftapps.com/";
-
+ServiceProxy.REQUEST_URL = "http://192.168.1.3:8080/"
 //"http://localhost:8080/";
+    //"http://nodejs-mongo-persistent-test-project-cankillah1.1d35.starter-us-east-1.openshiftapps.com/";
+
+//

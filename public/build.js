@@ -33,7 +33,7 @@ var AppController = exports.AppController = function () {
     function AppController() {
         _classCallCheck(this, AppController);
 
-        this.initialize();
+        window.onload = this.initialize.bind(this);
     }
 
     _createClass(AppController, [{
@@ -48,7 +48,7 @@ var AppController = exports.AppController = function () {
     return AppController;
 }();
 
-},{"./AppProxy":4,"./AppView":5,"./components/AssetsManager":6,"./core/Renderer":38,"./states/StateMachine":43}],3:[function(require,module,exports){
+},{"./AppProxy":4,"./AppView":5,"./components/AssetsManager":6,"./core/Renderer":39,"./states/StateMachine":45}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -62,6 +62,8 @@ var _ServiceProxy = require('./components/ServiceProxy');
 
 var _Constants = require('./components/Constants');
 
+var _StateMachine = require('./states/StateMachine');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var AppModel = exports.AppModel = function () {
@@ -72,19 +74,37 @@ var AppModel = exports.AppModel = function () {
         this.reelsFrozen = [false, false, false, false, false, false];
         this.freezable = [true, true, true, true, true, true];
         this.reelsJoint = [];
-        this.combination = this.service.localCombination;
+        this.combination = [];
         this.balance = 10000;
+        this.linesCount = 239;
 
         this.spinReceivedSignal = new signals.Signal();
         this.initReceivedSignal = new signals.Signal();
         this.balanceUpdateSignal = new signals.Signal();
+        this.linesCountUpdateSignal = new signals.Signal();
         this.reelsFrozenUpdateSignal = new signals.Signal();
+        this.reelsFrozenExceedSignal = new signals.Signal();
+
+        _StateMachine.StateMachine.getInstance().stateChangeSignal.add(this.onStateChange.bind(this));
     }
 
-    //-----------------------spin request-response handling-------------------------------//
-
-
     _createClass(AppModel, [{
+        key: 'onStateChange',
+        value: function onStateChange(state) {
+            switch (state.getName()) {
+                case _Constants.Constants.BIG_WIN_STATE:
+                case _Constants.Constants.IDLE_STATE:
+                case _Constants.Constants.WIN_ANIMATION_STATE:
+                    {
+                        this.handleFreezeValue();
+                        break;
+                    }
+            }
+        }
+
+        //-----------------------spin request-response handling-------------------------------//
+
+    }, {
         key: 'getSpinData',
         value: function getSpinData() {
             this.service.spinResponseSignal.addOnce(this.onSpinResponseReceived.bind(this));
@@ -94,7 +114,8 @@ var AppModel = exports.AppModel = function () {
         key: 'getSpinRequestData',
         value: function getSpinRequestData() {
             var data = Object.create(null);
-            data.frozen = this.reelsFrozen;
+            data.frozen = this.parseFreezable(this.reelsFrozen, 0);
+            data.sessionId = this.sessionId;
             return data;
         }
     }, {
@@ -102,9 +123,12 @@ var AppModel = exports.AppModel = function () {
         value: function onSpinResponseReceived(data) {
             this.combination = data.combination;
             this.lines = data.lines;
-            this.freezable = data.freezable;
+            this.freezable = this.parseFreezable(data.freezable, 1);
             this.reelsJoint = data.joint;
             this.showDudes = data.dudes;
+            this.freezeValue = data.freezevalue;
+            this.bigwin = data.bigwin;
+            this.balance = data.balance;
             this.spinReceivedSignal.dispatch();
         }
         //----------------------init request-response handling---------------------------------//
@@ -119,12 +143,48 @@ var AppModel = exports.AppModel = function () {
         key: 'onInitResponseReceived',
         value: function onInitResponseReceived(data) {
             this.combination = data.combination;
-            this.freezable = data.freezable;
+            this.freezable = this.parseFreezable(data.freezable, 1);
+            this.sessionId = data.sessionId;
+            this.freezeValue = data.freezeValue;
+            this.balance = data.balance;
             this.initReceivedSignal.dispatch();
         }
 
         //-------------------------------------------------------------------------------------//
 
+    }, {
+        key: 'handleFreezeValue',
+        value: function handleFreezeValue() {
+            var value = this.freezeValue - this.getFrozenReelsCount();
+            if (value < 0) {
+                this.dropFrozenReels();
+                this.reelsFrozenExceedSignal.dispatch();
+            } else {
+                this.freezeValue = value;
+                this.reelsFrozenUpdateSignal.dispatch();
+            }
+        }
+    }, {
+        key: 'parseFreezable',
+        value: function parseFreezable(raw, direction) {
+            var result = [];
+            if (direction == 1) {
+                for (var i = 0; i < 6; i++) {
+                    if (raw.indexOf(i) < 0) {
+                        result.push(false);
+                    } else {
+                        result.push(true);
+                    }
+                }
+            } else {
+                for (var _i = 0; _i < 6; _i++) {
+                    if (raw[_i]) {
+                        result.push(_i);
+                    }
+                }
+            }
+            return result;
+        }
     }, {
         key: 'splitFrozenCombination',
         value: function splitFrozenCombination(combination) {
@@ -139,6 +199,11 @@ var AppModel = exports.AppModel = function () {
         key: 'freezeReel',
         value: function freezeReel(index, value) {
             this.reelsFrozen[index] = value;
+            if (value) {
+                this.freezeValue -= 1;
+            } else {
+                this.freezeValue += 1;
+            }
             this.reelsFrozenUpdateSignal.dispatch();
         }
     }, {
@@ -184,9 +249,14 @@ var AppModel = exports.AppModel = function () {
             return time;
         }
     }, {
+        key: 'updateLinesCount',
+        value: function updateLinesCount(value) {
+            this.linesCount = value;
+            this.linesCountUpdateSignal.dispatch(value);
+        }
+    }, {
         key: 'updateBalance',
         value: function updateBalance() {
-            this.balance += this.lines.length * 1000;
             this.balanceUpdateSignal.dispatch(this.balance);
         }
     }, {
@@ -212,7 +282,7 @@ AppModel.getInstance = function () {
     return this.instance;
 };
 
-},{"./components/Constants":10,"./components/ServiceProxy":24}],4:[function(require,module,exports){
+},{"./components/Constants":11,"./components/ServiceProxy":25,"./states/StateMachine":45}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -244,6 +314,7 @@ var AppProxy = exports.AppProxy = function () {
             this.sparkles = null;
             this.ironDudes = null;
             this.frames = null;
+            this.bigwin = null;
 
             this.assetsLoadedSignal = new signals.Signal();
             this.immediateStopSpinSignal = new signals.Signal();
@@ -292,6 +363,8 @@ var _Sparkles = require('./components/Sparkles');
 
 var _IronDudes = require('./components/IronDudes');
 
+var _BigWin = require('./components/BigWin');
+
 var _AppProxy = require('./AppProxy');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -325,6 +398,7 @@ var AppView = exports.AppView = function (_DisplayObject) {
             this.addLightning();
             this.addSparkles();
             this.addIronDude();
+            this.addBigwin();
         }
     }, {
         key: 'addBottomPanel',
@@ -375,6 +449,12 @@ var AppView = exports.AppView = function (_DisplayObject) {
             this.addChild(this.sparkles);
         }
     }, {
+        key: 'addBigwin',
+        value: function addBigwin() {
+            this.bigwin = new _BigWin.BigWin();
+            this.addChild(this.bigwin);
+        }
+    }, {
         key: 'addIronDude',
         value: function addIronDude() {}
     }]);
@@ -382,7 +462,7 @@ var AppView = exports.AppView = function (_DisplayObject) {
     return AppView;
 }(_DisplayObject2.DisplayObject);
 
-},{"./AppProxy":4,"./components/AssetsManager":6,"./components/Background":7,"./components/BottomPanel":9,"./components/IconAnimations":14,"./components/IronDudes":16,"./components/Lightning":19,"./components/Lines":20,"./components/Reels":23,"./components/Sparkles":26,"./core/DisplayObject":37}],6:[function(require,module,exports){
+},{"./AppProxy":4,"./components/AssetsManager":6,"./components/Background":7,"./components/BigWin":9,"./components/BottomPanel":10,"./components/IconAnimations":15,"./components/IronDudes":17,"./components/Lightning":20,"./components/Lines":21,"./components/Reels":24,"./components/Sparkles":27,"./core/DisplayObject":38}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -409,12 +489,39 @@ var AssetsManager = exports.AssetsManager = function () {
     }, {
         key: "loadAtlas",
         value: function loadAtlas() {
-            PIXI.loader.add("img/bottom_panel.json").add("img/icon_animations_1.json").add("img/icon_animations_2.json").add("img/icon_animations_3.json").add("img/icon_animations_4.json").add("img/back.json").add("img/lightning.json").add("img/temp.json").load(this.onAtlasLoaded);
+            PIXI.loader
+            /*.add("img/bottom_panel.json")
+            .add("img/icon_animations_1.json")
+            .add("img/icon_animations_2.json")
+            .add("img/icon_animations_3.json")
+            .add("img/icon_animations_4.json")
+            .add("img/back.json")
+            .add("img/lightning.json")
+            .add("img/frames.json")
+            .add("img/bigwin.json")*/
+            //http://localhost/img/back.png
+            .add("http://localhost/img/bottom_panel.json").add("http://localhost/img/icon_animations_1.json").add("http://localhost/img/icon_animations_2.json").add("http://localhost/img/icon_animations_3.json").add("http://localhost/img/icon_animations_4.json").add("http://localhost/img/back.json").add("http://localhost/img/lightning.json").add("http://localhost/img/frames.json").add("http://localhost/img/bigwin.json").load(this.onAtlasLoaded);
         }
     }, {
         key: "onAtlasLoaded",
         value: function onAtlasLoaded() {
-            self.textures = Object.assign({}, PIXI.loader.resources["img/bottom_panel.json"].textures, PIXI.loader.resources["img/icon_animations_1.json"].textures, PIXI.loader.resources["img/icon_animations_2.json"].textures, PIXI.loader.resources["img/icon_animations_3.json"].textures, PIXI.loader.resources["img/icon_animations_4.json"].textures, PIXI.loader.resources["img/back.json"].textures, PIXI.loader.resources["img/lightning.json"].textures, PIXI.loader.resources["img/temp.json"].textures);
+            self.textures = Object.assign({}, PIXI.loader.resources["http://localhost/img/bottom_panel.json"].textures, PIXI.loader.resources["http://localhost/img/icon_animations_1.json"].textures, PIXI.loader.resources["http://localhost/img/icon_animations_2.json"].textures, PIXI.loader.resources["http://localhost/img/icon_animations_3.json"].textures, PIXI.loader.resources["http://localhost/img/icon_animations_4.json"].textures, PIXI.loader.resources["http://localhost/img/back.json"].textures, PIXI.loader.resources["http://localhost/img/lightning.json"].textures, PIXI.loader.resources["http://localhost/img/frames.json"].textures, PIXI.loader.resources["http://localhost/img/bigwin.json"].textures);
+
+            /*self.textures = Object.assign({},
+                PIXI.loader.resources["img/bottom_panel.json"].textures,
+                PIXI.loader.resources["img/icon_animations_1.json"].textures,
+                PIXI.loader.resources["img/icon_animations_2.json"].textures,
+                PIXI.loader.resources["img/icon_animations_3.json"].textures,
+                PIXI.loader.resources["img/icon_animations_4.json"].textures,
+                PIXI.loader.resources["img/back.json"].textures,
+                PIXI.loader.resources["img/lightning.json"].textures,
+                PIXI.loader.resources["img/frames.json"].textures,
+                PIXI.loader.resources["img/bigwin.json"].textures
+               // PIXI.loader.resources["img/dude_1_1.json"].textures,
+                //PIXI.loader.resources["img/dude_1_2.json"].textures,
+                //PIXI.loader.resources["img/dude_2_1.json"].textures,
+                //PIXI.loader.resources["img/dude_2_2.json"].textures
+            );*/
 
             _AppProxy.AppProxy.getInstance().assetsLoadedSignal.dispatch();
         }
@@ -466,6 +573,18 @@ var AssetsManager = exports.AssetsManager = function () {
             while (self.textures.hasOwnProperty(name)) {
                 list.push(self.textures[name]);
                 name = "frame (" + ++i + ").png";
+            }
+            return list;
+        }
+    }, {
+        key: "getBigWinAnimation",
+        value: function getBigWinAnimation() {
+            var list = [];
+            var i = 0;
+            var name = "bigwin (" + i + ").png";
+            while (self.textures.hasOwnProperty(name)) {
+                list.push(self.textures[name]);
+                name = "bigwin (" + ++i + ").png";
             }
             return list;
         }
@@ -557,6 +676,26 @@ var AssetsManager = exports.AssetsManager = function () {
         value: function getTotalBetBackgroundTexture() {
             return self.textures["totalbet_panel.png"];
         }
+    }, {
+        key: "getSlideDefaultTexture",
+        value: function getSlideDefaultTexture() {
+            return self.textures["slide_default.png"];
+        }
+    }, {
+        key: "getSlideActiveTexture",
+        value: function getSlideActiveTexture() {
+            return self.textures["slide_active.png"];
+        }
+    }, {
+        key: "getSlideDisabledTexture",
+        value: function getSlideDisabledTexture() {
+            return self.textures["slide_disabled.png"];
+        }
+    }, {
+        key: "getSlideButtonTexture",
+        value: function getSlideButtonTexture() {
+            return [self.textures["slide_button.png"], self.textures["slide_button.png"], self.textures["slide_button.png"], self.textures["slide_button.png"]];
+        }
     }]);
 
     return AssetsManager;
@@ -613,6 +752,10 @@ var _AssetsManager = require('./AssetsManager');
 
 var _AppModel = require('./../AppModel');
 
+var _StateMachine = require('./../states/StateMachine');
+
+var _Constants = require('./Constants');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -645,12 +788,13 @@ var BetPanel = exports.BetPanel = function (_DisplayObject) {
             this.lineText1 = this.getText(22);
             this.lineText1.y += -15;
             this.lineText1.x += -68;
+            this.lineText1.text = _AppModel.AppModel.getInstance().linesCount;
             this.addChild(this.lineText1);
 
             this.lineText2 = this.getText(22);
             this.lineText2.y += -15;
             this.lineText2.x += -68 + 112;
-            this.lineText2.text = "1";
+            this.lineText2.text = _AppModel.AppModel.getInstance().freezeValue;
             this.addChild(this.lineText2);
 
             this.totalbet = new PIXI.Sprite(new _AssetsManager.AssetsManager().getTotalBetBackgroundTexture());
@@ -665,12 +809,35 @@ var BetPanel = exports.BetPanel = function (_DisplayObject) {
 
             _AppModel.AppModel.getInstance().reelsFrozenUpdateSignal.add(this.onReelsFrozenUpdate.bind(this));
 
+            _AppModel.AppModel.getInstance().linesCountUpdateSignal.add(this.onLinesCountUpdate.bind(this));
+
+            _StateMachine.StateMachine.getInstance().stateChangeSignal.add(this.onStateChange.bind(this));
+
             this.onReelsFrozenUpdate();
+        }
+    }, {
+        key: 'onStateChange',
+        value: function onStateChange(state) {
+            switch (state.getName()) {
+                case _Constants.Constants.BIG_WIN_STATE:
+                case _Constants.Constants.IDLE_STATE:
+                case _Constants.Constants.WIN_ANIMATION_STATE:
+                    {
+                        this.onReelsFrozenUpdate();
+                        break;
+                    }
+            }
+        }
+    }, {
+        key: 'onLinesCountUpdate',
+        value: function onLinesCountUpdate(value) {
+            this.lineText1.text = value;
         }
     }, {
         key: 'onReelsFrozenUpdate',
         value: function onReelsFrozenUpdate() {
             this.betText.text = _AppModel.AppModel.getInstance().getSpinPrice();
+            this.lineText2.text = _AppModel.AppModel.getInstance().freezeValue;
         }
     }, {
         key: 'getText',
@@ -699,7 +866,90 @@ var BetPanel = exports.BetPanel = function (_DisplayObject) {
     return BetPanel;
 }(_DisplayObject2.DisplayObject);
 
-},{"./../AppModel":3,"./../core/DisplayObject":37,"./AssetsManager":6}],9:[function(require,module,exports){
+},{"./../AppModel":3,"./../core/DisplayObject":38,"./../states/StateMachine":45,"./AssetsManager":6,"./Constants":11}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.BigWin = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _DisplayObject2 = require('../core/DisplayObject');
+
+var _AssetsManager = require('./AssetsManager');
+
+var _AppProxy = require('./../AppProxy');
+
+var _Constants = require('./Constants');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by me on 02.06.2017.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+var BigWin = exports.BigWin = function (_DisplayObject) {
+    _inherits(BigWin, _DisplayObject);
+
+    function BigWin() {
+        _classCallCheck(this, BigWin);
+
+        var _this = _possibleConstructorReturn(this, (BigWin.__proto__ || Object.getPrototypeOf(BigWin)).call(this));
+
+        _this.initialize();
+        _this.setLocation();
+        return _this;
+    }
+
+    _createClass(BigWin, [{
+        key: 'initialize',
+        value: function initialize() {
+            _AppProxy.AppProxy.getInstance().bigwin = this;
+            var textures = new _AssetsManager.AssetsManager().getBigWinAnimation();
+            this.container = new PIXI.extras.AnimatedSprite(textures);
+            this.addChild(this.container);
+            this.container.visible = false;
+            this.container.animationSpeed = 0.5;
+            this.animationCompleteSignal = new signals.Signal();
+        }
+    }, {
+        key: 'setLocation',
+        value: function setLocation() {
+            this.x = 372;
+            this.y = 456;
+        }
+    }, {
+        key: 'onAnimationComplete',
+        value: function onAnimationComplete() {
+            this.hide();
+            this.animationCompleteSignal.dispatch();
+        }
+    }, {
+        key: 'show',
+        value: function show() {
+            this.container.visible = true;
+            this.container.gotoAndStop(0);
+            this.container.play();
+
+            setTimeout(this.onAnimationComplete.bind(this), _Constants.Constants.BIG_WIN_TIME);
+        }
+    }, {
+        key: 'hide',
+        value: function hide() {
+            this.container.visible = false;
+            this.container.stop();
+        }
+    }]);
+
+    return BigWin;
+}(_DisplayObject2.DisplayObject);
+
+},{"../core/DisplayObject":38,"./../AppProxy":4,"./AssetsManager":6,"./Constants":11}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -789,7 +1039,7 @@ var BottomPanel = exports.BottomPanel = function (_PIXI$Sprite) {
         return BottomPanel;
 }(PIXI.Sprite);
 
-},{"./AssetsManager":6,"./BetPanel":8,"./LightPanel":18,"./WinText":28,"./buttons/InfoButton":30,"./buttons/SpinButton":34,"./buttons/StartButton":35,"./buttons/StopButton":36}],10:[function(require,module,exports){
+},{"./AssetsManager":6,"./BetPanel":8,"./LightPanel":19,"./WinText":29,"./buttons/InfoButton":31,"./buttons/SpinButton":35,"./buttons/StartButton":36,"./buttons/StopButton":37}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -817,6 +1067,7 @@ Constants.DUDES_TIME = 3000;
 Constants.JOINT_ADD_TIME = 2000;
 Constants.LINE_DEF_DELAY = 3000;
 Constants.LINE_SHORT_DELAY = 2000;
+Constants.BIG_WIN_TIME = 3000;
 Constants.MAX_FROZEN_COUNT = 4;
 Constants.ANIMATION_DURATION_MAP = [1, 1, 1, 1, 1, 1, 1.55, 1.3, 2.05, 1.05];
 
@@ -825,8 +1076,9 @@ Constants.IDLE_STATE = "IdleState";
 Constants.SPIN_START_STATE = "SpinStartState";
 Constants.SPIN_STOP_STATE = "SpinStopState";
 Constants.WIN_ANIMATION_STATE = "WinAnimationState";
+Constants.BIG_WIN_STATE = "BigWinState";
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -931,7 +1183,7 @@ var Frames = exports.Frames = function (_DisplayObject) {
     return Frames;
 }(_DisplayObject2.DisplayObject);
 
-},{"./../AppProxy":4,"./../core/DisplayObject":37,"./AssetsManager":6,"./Constants":10}],12:[function(require,module,exports){
+},{"./../AppProxy":4,"./../core/DisplayObject":38,"./AssetsManager":6,"./Constants":11}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -982,7 +1234,7 @@ var Icon = exports.Icon = function (_PIXI$extras$Animated) {
     return Icon;
 }(PIXI.extras.AnimatedSprite);
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1099,7 +1351,7 @@ var IconAnimation = exports.IconAnimation = function (_DisplayObject) {
     return IconAnimation;
 }(_DisplayObject2.DisplayObject);
 
-},{"../components/AssetsManager":6,"../core/DisplayObject":37,"./Constants":10}],14:[function(require,module,exports){
+},{"../components/AssetsManager":6,"../core/DisplayObject":38,"./Constants":11}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1269,7 +1521,7 @@ var IconAnimations = exports.IconAnimations = function (_DisplayObject) {
     return IconAnimations;
 }(_DisplayObject2.DisplayObject);
 
-},{"../AppModel":3,"../AppProxy":4,"../core/DisplayObject":37,"./Constants":10,"./IconAnimation":13}],15:[function(require,module,exports){
+},{"../AppModel":3,"../AppProxy":4,"../core/DisplayObject":38,"./Constants":11,"./IconAnimation":14}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1351,7 +1603,7 @@ var IronDude = exports.IronDude = function (_DisplayObject) {
     return IronDude;
 }(_DisplayObject2.DisplayObject);
 
-},{"./../core/DisplayObject":37,"./AssetsManager":6}],16:[function(require,module,exports){
+},{"./../core/DisplayObject":38,"./AssetsManager":6}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1423,7 +1675,7 @@ var IronDudes = exports.IronDudes = function (_DisplayObject) {
     return IronDudes;
 }(_DisplayObject2.DisplayObject);
 
-},{"./../AppProxy":4,"./../core/DisplayObject":37,"./IronDude":15}],17:[function(require,module,exports){
+},{"./../AppProxy":4,"./../core/DisplayObject":38,"./IronDude":16}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1572,7 +1824,7 @@ var LightComponent = exports.LightComponent = function (_DisplayObject) {
     return LightComponent;
 }(_DisplayObject2.DisplayObject);
 
-},{"../core/DisplayObject":37,"../states/StateMachine":43,"./AssetsManager":6,"./Constants":10}],18:[function(require,module,exports){
+},{"../core/DisplayObject":38,"../states/StateMachine":45,"./AssetsManager":6,"./Constants":11}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1637,8 +1889,6 @@ var LightPanel = exports.LightPanel = function (_DisplayObject) {
             this.buttonClickSignal = new signals.Signal();
 
             _AppModel.AppModel.getInstance().reelsFrozenUpdateSignal.add(this.reelsFrozenCountUpdate.bind(this));
-
-            _StateMachine.StateMachine.getInstance().stateChangeSignal.add(this.onStateChange.bind(this));
         }
     }, {
         key: 'onStateChange',
@@ -1677,10 +1927,11 @@ var LightPanel = exports.LightPanel = function (_DisplayObject) {
         key: 'reelsFrozenCountUpdate',
         value: function reelsFrozenCountUpdate() {
             var frozenCount = _AppModel.AppModel.getInstance().getFrozenReelsCount();
-            if (frozenCount == _Constants.Constants.MAX_FROZEN_COUNT) {
-                _AppProxy.AppProxy.getInstance().lightPanel.lockButtons();
+            var freezeValue = _AppModel.AppModel.getInstance().freezeValue;
+            if (frozenCount == _Constants.Constants.MAX_FROZEN_COUNT || freezeValue == 0) {
+                this.lockButtons();
             } else {
-                _AppProxy.AppProxy.getInstance().lightPanel.unlockButtons();
+                this.unlockButtons();
             }
         }
     }, {
@@ -1703,7 +1954,7 @@ var LightPanel = exports.LightPanel = function (_DisplayObject) {
     return LightPanel;
 }(_DisplayObject2.DisplayObject);
 
-},{"../AppProxy":4,"../core/DisplayObject":37,"../states/StateMachine":43,"./../AppModel":3,"./AssetsManager":6,"./Constants":10,"./buttons/LightButton":31}],19:[function(require,module,exports){
+},{"../AppProxy":4,"../core/DisplayObject":38,"../states/StateMachine":45,"./../AppModel":3,"./AssetsManager":6,"./Constants":11,"./buttons/LightButton":32}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1767,6 +2018,7 @@ var Lightning = exports.Lightning = function (_DisplayObject) {
             _AppProxy.AppProxy.getInstance().lightPanel.buttonOverSignal.add(this.onPanelButtonOver.bind(this));
             _AppProxy.AppProxy.getInstance().lightPanel.buttonOutSignal.add(this.onPanelButtonOut.bind(this));
             _AppProxy.AppProxy.getInstance().lightPanel.buttonClickSignal.add(this.onPanelButtonClick.bind(this));
+            _AppModel.AppModel.getInstance().reelsFrozenExceedSignal.add(this.onReelsFrozenExceeded.bind(this));
         }
     }, {
         key: 'createComponents',
@@ -1809,6 +2061,15 @@ var Lightning = exports.Lightning = function (_DisplayObject) {
             this.components[index].hide();
         }
     }, {
+        key: 'onReelsFrozenExceeded',
+        value: function onReelsFrozenExceeded() {
+            for (var i = 0; i < this.components.length; i++) {
+                if (this.components[i].frozen) {
+                    this.components[i].unfreeze();
+                }
+            }
+        }
+    }, {
         key: 'onPanelButtonClick',
         value: function onPanelButtonClick(index) {
             if (this.components[index].frozen) {
@@ -1824,7 +2085,7 @@ var Lightning = exports.Lightning = function (_DisplayObject) {
     return Lightning;
 }(_DisplayObject2.DisplayObject);
 
-},{"../AppModel":3,"../AppProxy":4,"../components/AssetsManager":6,"../core/DisplayObject":37,"../states/StateMachine":43,"./Constants":10,"./LightComponent":17}],20:[function(require,module,exports){
+},{"../AppModel":3,"../AppProxy":4,"../components/AssetsManager":6,"../core/DisplayObject":38,"../states/StateMachine":45,"./Constants":11,"./LightComponent":18}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1933,6 +2194,7 @@ var Lines = exports.Lines = function (_DisplayObject) {
     }, {
         key: 'onSliderValueUpdate',
         value: function onSliderValueUpdate(value) {
+            _AppModel.AppModel.getInstance().updateLinesCount(value);
             //this.drawLine(AppModel.LINES_MAP[value]);
         }
     }]);
@@ -1940,7 +2202,7 @@ var Lines = exports.Lines = function (_DisplayObject) {
     return Lines;
 }(_DisplayObject2.DisplayObject);
 
-},{"../AppModel":3,"../AppProxy":4,"../components/buttons/LinesButton":32,"../core/DisplayObject":37,"./AssetsManager":6,"./Constants":10,"./Frames":11,"./Slider":25}],21:[function(require,module,exports){
+},{"../AppModel":3,"../AppProxy":4,"../components/buttons/LinesButton":33,"../core/DisplayObject":38,"./AssetsManager":6,"./Constants":11,"./Frames":12,"./Slider":26}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2115,7 +2377,7 @@ var Reel = exports.Reel = function (_DisplayObject) {
     return Reel;
 }(_DisplayObject2.DisplayObject);
 
-},{"../core/DisplayObject":37,"./../AppProxy":4,"./AssetsManager":6,"./Constants":10,"./Icon":12,"./Utils":27}],22:[function(require,module,exports){
+},{"../core/DisplayObject":38,"./../AppProxy":4,"./AssetsManager":6,"./Constants":11,"./Icon":13,"./Utils":28}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2153,6 +2415,7 @@ var ReelJoint = exports.ReelJoint = function () {
         key: 'onStateChange',
         value: function onStateChange(state) {
             switch (state.getName()) {
+                case _Constants.Constants.BIG_WIN_STATE:
                 case _Constants.Constants.WIN_ANIMATION_STATE:
                 case _Constants.Constants.IDLE_STATE:
                     {
@@ -2268,7 +2531,7 @@ var ReelJoint = exports.ReelJoint = function () {
     return ReelJoint;
 }();
 
-},{"./../AppProxy":4,"./../components/Constants":10,"./../states/StateMachine":43}],23:[function(require,module,exports){
+},{"./../AppProxy":4,"./../components/Constants":11,"./../states/StateMachine":45}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2423,7 +2686,7 @@ var Reels = exports.Reels = function (_DisplayObject) {
     return Reels;
 }(_DisplayObject2.DisplayObject);
 
-},{"../core/DisplayObject":37,"./../AppModel":3,"./../AppProxy":4,"./../states/StateMachine":43,"./Constants":10,"./Reel":21,"./ReelJoint":22}],24:[function(require,module,exports){
+},{"../core/DisplayObject":38,"./../AppModel":3,"./../AppProxy":4,"./../states/StateMachine":45,"./Constants":11,"./Reel":22,"./ReelJoint":23}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2494,12 +2757,13 @@ var ServiceProxy = exports.ServiceProxy = function () {
     return ServiceProxy;
 }();
 
-ServiceProxy.REQUEST_URL = //"http://localhost:8080/";
-"http://nodejs-mongo-persistent-test-project-cankillah1.1d35.starter-us-east-1.openshiftapps.com/";
-
+ServiceProxy.REQUEST_URL = "http://192.168.1.3:8080/";
 //"http://localhost:8080/";
+//"http://nodejs-mongo-persistent-test-project-cankillah1.1d35.starter-us-east-1.openshiftapps.com/";
 
-},{}],25:[function(require,module,exports){
+//
+
+},{}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2538,9 +2802,6 @@ var Slider = exports.Slider = function (_PIXI$Container) {
 
         var _this = _possibleConstructorReturn(this, (Slider.__proto__ || Object.getPrototypeOf(Slider)).call(this));
 
-        _this.sliderHeight = 500;
-        _this.value = 239;
-        _this.locked = false;
         _this.initialize();
         return _this;
     }
@@ -2548,12 +2809,18 @@ var Slider = exports.Slider = function (_PIXI$Container) {
     _createClass(Slider, [{
         key: 'initialize',
         value: function initialize() {
-            this.button = new _SliderButton.SliderButton(new _AssetsManager.AssetsManager().getSliderButtonTextures());
+            this.sliderHeight = 520;
+            this.defValue = 239;
+            this.value = this.defValue;
+            this.locked = false;
+
+            this.createSlideSprite();
+
+            this.button = new _SliderButton.SliderButton(new _AssetsManager.AssetsManager().getSlideButtonTexture());
             this.addChild(this.button);
 
             this.graphics = new PIXI.Graphics();
             this.addChild(this.graphics);
-            this.redrawLine(false);
 
             this.button.clickSignal.add(this.onButtonClick.bind(this));
 
@@ -2561,6 +2828,21 @@ var Slider = exports.Slider = function (_PIXI$Container) {
             this.loseFocusSignal = new signals.Signal();
 
             _StateMachine.StateMachine.getInstance().stateChangeSignal.add(this.onStateChange.bind(this));
+        }
+    }, {
+        key: 'createSlideSprite',
+        value: function createSlideSprite() {
+            var t1 = new _AssetsManager.AssetsManager().getSlideDefaultTexture();
+            this.downSprite = new PIXI.Sprite(t1);
+            this.downSprite.y = 162;
+            this.addChild(this.downSprite);
+
+            this.upSprite = new PIXI.Sprite(t1);
+            this.upSprite.scale.y = -1;
+            this.upSprite.y = 361;
+            this.addChild(this.upSprite);
+
+            this.spriteTextures = [new _AssetsManager.AssetsManager().getSlideDefaultTexture(), new _AssetsManager.AssetsManager().getSlideActiveTexture(), new _AssetsManager.AssetsManager().getSlideDisabledTexture()];
         }
     }, {
         key: 'onStateChange',
@@ -2589,14 +2871,10 @@ var Slider = exports.Slider = function (_PIXI$Container) {
         value: function redrawLine(active) {
             var locked = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-            var color = active ? 0x9C8137 : 0x468DBC; //
-            if (locked) color = 0x6B7B86;
-            this.graphics.clear();
-            this.graphics.lineStyle(5, color);
-            this.graphics.drawCircle(20, this.button.height / 2, 3, 3);
-            this.graphics.drawCircle(20, this.sliderHeight, 3, 3);
-            this.graphics.moveTo(20, this.button.height / 2);
-            this.graphics.lineTo(20, this.sliderHeight);
+            var texture = active ? this.spriteTextures[1] : this.spriteTextures[0];
+            if (locked) texture = this.spriteTextures[2];
+            this.downSprite.texture = texture;
+            this.upSprite.texture = texture;
         }
     }, {
         key: 'lock',
@@ -2650,10 +2928,10 @@ var Slider = exports.Slider = function (_PIXI$Container) {
     }, {
         key: 'setValue',
         value: function setValue() {
-            var value = Math.round(239 * this.button.y / (this.sliderHeight - this.button.height / 2));
-            //if (value == 0) value = 1;
+            var value = Math.round(this.defValue - this.defValue * this.button.y / (this.sliderHeight - this.button.height / 2));
             if (this.value != value) {
                 this.value = value;
+                if (this.value == 0) this.value = 1;
                 this.valueUpdateSignal.dispatch(this.value);
             }
         }
@@ -2673,7 +2951,7 @@ var Slider = exports.Slider = function (_PIXI$Container) {
     return Slider;
 }(PIXI.Container);
 
-},{"../AppProxy":4,"../components/AssetsManager":6,"../components/buttons/SliderButton":33,"../core/DisplayObject":37,"../states/StateMachine":43,"./Constants":10}],26:[function(require,module,exports){
+},{"../AppProxy":4,"../components/AssetsManager":6,"../components/buttons/SliderButton":34,"../core/DisplayObject":38,"../states/StateMachine":45,"./Constants":11}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2746,7 +3024,7 @@ var Sparkles = exports.Sparkles = function (_DisplayObject) {
     return Sparkles;
 }(_DisplayObject2.DisplayObject);
 
-},{"../core/DisplayObject":37,"./../AppProxy":4,"./AssetsManager":6}],27:[function(require,module,exports){
+},{"../core/DisplayObject":38,"./../AppProxy":4,"./AssetsManager":6}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2785,7 +3063,7 @@ var Utils = exports.Utils = function () {
     return Utils;
 }();
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2893,7 +3171,7 @@ var WinText = exports.WinText = function (_DisplayObject) {
     return WinText;
 }(_DisplayObject2.DisplayObject);
 
-},{"./../AppModel":3,"./../core/DisplayObject":37,"./../states/StateMachine":43,"./Constants":10}],29:[function(require,module,exports){
+},{"./../AppModel":3,"./../core/DisplayObject":38,"./../states/StateMachine":45,"./Constants":11}],30:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2942,7 +3220,7 @@ var Button = exports.Button = function (_PIXI$extras$Animated) {
             this.interactive = true;
             this.on('mouseover', this.onMouseOver.bind(this));
             this.on('mouseout', this.onMouseOut.bind(this));
-            this.on('mousedown', this.onMouseDown.bind(this));
+            this.on('pointerdown', this.onMouseDown.bind(this));
             _StateMachine.StateMachine.getInstance().stateChangeSignal.add(this.onStateChange.bind(this));
         }
     }, {
@@ -2977,7 +3255,7 @@ var Button = exports.Button = function (_PIXI$extras$Animated) {
     return Button;
 }(PIXI.extras.AnimatedSprite);
 
-},{"../../AppProxy.js":4,"../../states/StateMachine.js":43,"../Constants.js":10}],30:[function(require,module,exports){
+},{"../../AppProxy.js":4,"../../states/StateMachine.js":45,"../Constants.js":11}],31:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3052,7 +3330,7 @@ var InfoButton = exports.InfoButton = function (_Button) {
     return InfoButton;
 }(_Button2.Button);
 
-},{"../../AppProxy":4,"../Constants":10,"./Button":29}],31:[function(require,module,exports){
+},{"../../AppProxy":4,"../Constants":11,"./Button":30}],32:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3097,7 +3375,7 @@ var LightButton = exports.LightButton = function (_Button) {
         _this.clickSignal = new signals.Signal();
         _this.setLocation();
 
-        _StateMachine.StateMachine.getInstance().stateChangeSignal.add(_this.onStateChange.bind(_this));
+        _AppModel.AppModel.getInstance().reelsFrozenExceedSignal.add(_this.onReelsFrozenExceeded.bind(_this));
         return _this;
     }
 
@@ -3106,10 +3384,7 @@ var LightButton = exports.LightButton = function (_Button) {
         value: function onStateChange(state) {
             switch (state.getName()) {
                 case _Constants.Constants.SPIN_START_STATE:
-                    {
-                        this.lock();
-                        break;
-                    }
+                case _Constants.Constants.BIG_WIN_STATE:
                 case _Constants.Constants.SPIN_STOP_STATE:
                     {
                         this.lock();
@@ -3118,13 +3393,33 @@ var LightButton = exports.LightButton = function (_Button) {
                 case _Constants.Constants.IDLE_STATE:
                 case _Constants.Constants.WIN_ANIMATION_STATE:
                     {
-                        if (_AppModel.AppModel.getInstance().freezable[this.index]) {
-                            this.unlock();
-                            this.onMouseOut();
-                        }
+                        this.handleUnlockState();
                         break;
                     }
             }
+        }
+    }, {
+        key: 'handleUnlockState',
+        value: function handleUnlockState() {
+            if (_AppModel.AppModel.getInstance().freezeValue == 0) return;
+
+            var frozenCount = _AppModel.AppModel.getInstance().getFrozenReelsCount();
+            if (frozenCount == _Constants.Constants.MAX_FROZEN_COUNT) {
+                if (this.selected) {
+                    this.unlock();
+                    this.onMouseOut();
+                }
+                return;
+            }
+            if (_AppModel.AppModel.getInstance().freezable[this.index]) {
+                this.unlock();
+                this.onMouseOut();
+            }
+        }
+    }, {
+        key: 'onReelsFrozenExceeded',
+        value: function onReelsFrozenExceeded() {
+            this.selected = false;
         }
     }, {
         key: 'setLocation',
@@ -3174,7 +3469,7 @@ var LightButton = exports.LightButton = function (_Button) {
     return LightButton;
 }(_Button2.Button);
 
-},{"../../states/StateMachine":43,"../Constants":10,"./../../AppModel":3,"./Button":29}],32:[function(require,module,exports){
+},{"../../states/StateMachine":45,"../Constants":11,"./../../AppModel":3,"./Button":30}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3241,7 +3536,7 @@ var LinesButton = exports.LinesButton = function (_Button) {
     return LinesButton;
 }(_Button2.Button);
 
-},{"./Button":29}],33:[function(require,module,exports){
+},{"./Button":30}],34:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3323,7 +3618,7 @@ var SliderButton = exports.SliderButton = function (_Button) {
     return SliderButton;
 }(_Button2.Button);
 
-},{"./Button":29}],34:[function(require,module,exports){
+},{"./Button":30}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3379,6 +3674,12 @@ var SpinButton = exports.SpinButton = function (_Button) {
                         this.setVisible(true);
                         break;
                     }
+                case _Constants.Constants.BIG_WIN_STATE:
+                    {
+                        this.setVisible(true);
+                        this.setActive(false);
+                        break;
+                    }
                 case _Constants.Constants.WIN_ANIMATION_STATE:
                     {
                         this.setVisible(true);
@@ -3404,7 +3705,7 @@ var SpinButton = exports.SpinButton = function (_Button) {
     return SpinButton;
 }(_Button2.Button);
 
-},{"../../AppProxy":4,"../Constants":10,"./Button":29}],35:[function(require,module,exports){
+},{"../../AppProxy":4,"../Constants":11,"./Button":30}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3479,7 +3780,7 @@ var StartButton = exports.StartButton = function (_Button) {
     return StartButton;
 }(_Button2.Button);
 
-},{"../../AppProxy":4,"../Constants":10,"./Button":29}],36:[function(require,module,exports){
+},{"../../AppProxy":4,"../Constants":11,"./Button":30}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3542,6 +3843,11 @@ var StopButton = exports.StopButton = function (_Button) {
                         this.setActive(true);
                         break;
                     }
+                case _Constants.Constants.BIG_WIN_STATE:
+                    {
+                        this.setVisible(false);
+                        break;
+                    }
                 case _Constants.Constants.IDLE_STATE:
                     {
                         this.setVisible(false);
@@ -3565,7 +3871,7 @@ var StopButton = exports.StopButton = function (_Button) {
     return StopButton;
 }(_Button2.Button);
 
-},{"../../AppProxy":4,"../../states/StateMachine":43,"../Constants":10,"./Button":29}],37:[function(require,module,exports){
+},{"../../AppProxy":4,"../../states/StateMachine":45,"../Constants":11,"./Button":30}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3606,7 +3912,7 @@ var DisplayObject = exports.DisplayObject = function (_PIXI$Sprite) {
     return DisplayObject;
 }(PIXI.Sprite);
 
-},{"./Renderer.js":38}],38:[function(require,module,exports){
+},{"./Renderer.js":39}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3635,12 +3941,15 @@ var Renderer = exports.Renderer = function () {
         value: function initialize() {
 
             var canvas = document.getElementById('canvas');
-            this.renderer = PIXI.autoDetectRenderer(1262, 760, canvas);
-            document.body.appendChild(this.renderer.view);
-            this.renderer.view.style.position = 'absolute';
-            this.renderer.view.style.left = '50%';
-            this.renderer.view.style.top = '50%';
-            this.renderer.view.style.transform = 'translate3d( -50%, -50%, 0 )';
+            this.renderer = PIXI.autoDetectRenderer(1262, 760, { antialias: false, transparent: true, resolution: 1 }); //canvas, true);
+            //this.renderer = new PIXI.CanvasRenderer(1262, 760, canvas);
+            // document.body.appendChild(this.renderer.view);
+            canvas.appendChild(this.renderer.view);
+            //this.renderer.view.style.position = 'absolute';
+            //this.renderer.view.style.left = '50%';
+            //this.renderer.view.style.top = '50%';
+            //this.renderer.backgroundColor = 0x00abff;
+            //this.renderer.view.style.transform = 'translate3d( -50%, -50%, 0 )';
 
             this.ratio = 1262 / 760;
 
@@ -3665,8 +3974,8 @@ var Renderer = exports.Renderer = function () {
                 var w = window.innerWidth;
                 var h = window.innerWidth / this.ratio;
             }
-            this.renderer.view.style.width = w / 1.2 + 'px';
-            this.renderer.view.style.height = h / 1.2 + 'px';
+            this.renderer.view.style.width = w + 'px';
+            this.renderer.view.style.height = h + 'px';
         }
     }, {
         key: 'animate',
@@ -3674,6 +3983,13 @@ var Renderer = exports.Renderer = function () {
             requestAnimationFrame(this.animate.bind(this));
             this._onUpdateSignal.dispatch();
             this.renderer.render(this._stage);
+        }
+    }, {
+        key: 'dispose',
+        value: function dispose() {
+            document.body.removeChild(this.renderer.view);
+            this.renderer = null;
+            this._stage = null;
         }
     }, {
         key: 'onUpdateSignal',
@@ -3697,7 +4013,55 @@ Renderer.getInstance = function () {
     return this.instance;
 };
 
-},{"../AppProxy":4}],39:[function(require,module,exports){
+},{"../AppProxy":4}],40:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.BigWinState = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by me on 02.06.2017.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _Constants = require('../components/Constants');
+
+var _AppProxy = require('../AppProxy');
+
+var _StateMachine = require('./StateMachine');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var BigWinState = exports.BigWinState = function () {
+    function BigWinState() {
+        _classCallCheck(this, BigWinState);
+    }
+
+    _createClass(BigWinState, [{
+        key: 'execute',
+        value: function execute() {
+            _AppProxy.AppProxy.getInstance().bigwin.animationCompleteSignal.addOnce(this.onAnimationComplete.bind(this));
+            _AppProxy.AppProxy.getInstance().bigwin.show();
+        }
+    }, {
+        key: 'onAnimationComplete',
+        value: function onAnimationComplete() {
+            _AppProxy.AppProxy.getInstance().bigwin.hide();
+            _StateMachine.StateMachine.getInstance().setState(_Constants.Constants.WIN_ANIMATION_STATE);
+        }
+    }, {
+        key: 'getName',
+        value: function getName() {
+            return _Constants.Constants.BIG_WIN_STATE;
+        }
+    }]);
+
+    return BigWinState;
+}();
+
+},{"../AppProxy":4,"../components/Constants":11,"./StateMachine":45}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3743,7 +4107,7 @@ var IdleState = exports.IdleState = function () {
     return IdleState;
 }();
 
-},{"../AppProxy":4,"../components/Constants":10,"./StateMachine":43}],40:[function(require,module,exports){
+},{"../AppProxy":4,"../components/Constants":11,"./StateMachine":45}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3790,7 +4154,6 @@ var InitState = exports.InitState = function () {
         key: 'onAssetsLoadComplete',
         value: function onAssetsLoadComplete() {
             this.assetsLoadComplete = true;
-            new _AssetsManager.AssetsManager().getDudeTextures();
             if (this.initResponseReceived) {
                 this.initComplete();
             }
@@ -3814,7 +4177,7 @@ var InitState = exports.InitState = function () {
     return InitState;
 }();
 
-},{"../AppModel":3,"../AppProxy":4,"../components/AssetsManager":6,"../components/Constants":10,"./StateMachine":43}],41:[function(require,module,exports){
+},{"../AppModel":3,"../AppProxy":4,"../components/AssetsManager":6,"../components/Constants":11,"./StateMachine":45}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3865,7 +4228,7 @@ var SpinStartState = exports.SpinStartState = function () {
     return SpinStartState;
 }();
 
-},{"../AppModel":3,"../AppProxy":4,"../components/Constants":10,"./StateMachine":43}],42:[function(require,module,exports){
+},{"../AppModel":3,"../AppProxy":4,"../components/Constants":11,"./StateMachine":45}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3918,12 +4281,16 @@ var SpinStopState = exports.SpinStopState = function () {
         value: function onSpinStopped() {
             clearTimeout(this.timer);
 
+            var state = _Constants.Constants.IDLE_STATE;
+
             if (_AppModel.AppModel.getInstance().lines.length) {
-                _StateMachine.StateMachine.getInstance().setState(_Constants.Constants.WIN_ANIMATION_STATE);
-            } else {
-                _StateMachine.StateMachine.getInstance().setState(_Constants.Constants.IDLE_STATE);
+                state = _Constants.Constants.WIN_ANIMATION_STATE;
+            }
+            if (_AppModel.AppModel.getInstance().bigwin) {
+                state = _Constants.Constants.BIG_WIN_STATE;
             }
             _AppModel.AppModel.getInstance().updateBalance();
+            _StateMachine.StateMachine.getInstance().setState(state);
         }
     }, {
         key: 'getName',
@@ -3935,7 +4302,7 @@ var SpinStopState = exports.SpinStopState = function () {
     return SpinStopState;
 }();
 
-},{"../AppModel":3,"../AppProxy":4,"../components/Constants":10,"./StateMachine":43}],43:[function(require,module,exports){
+},{"../AppModel":3,"../AppProxy":4,"../components/Constants":11,"./StateMachine":45}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3955,6 +4322,8 @@ var _SpinStopState = require('./SpinStopState');
 
 var _WinAnimationState = require('./WinAnimationState');
 
+var _BigWinState = require('./BigWinState');
+
 var _Constants = require('../components/Constants');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3971,6 +4340,7 @@ var StateMachine = exports.StateMachine = function () {
         this.stateMap[_Constants.Constants.SPIN_START_STATE] = new _SpinStartState.SpinStartState();
         this.stateMap[_Constants.Constants.SPIN_STOP_STATE] = new _SpinStopState.SpinStopState();
         this.stateMap[_Constants.Constants.WIN_ANIMATION_STATE] = new _WinAnimationState.WinAnimationState();
+        this.stateMap[_Constants.Constants.BIG_WIN_STATE] = new _BigWinState.BigWinState();
     }
 
     _createClass(StateMachine, [{
@@ -4002,7 +4372,7 @@ StateMachine.getInstance = function () {
     return this.instance;
 };
 
-},{"../components/Constants":10,"./IdleState":39,"./InitState":40,"./SpinStartState":41,"./SpinStopState":42,"./WinAnimationState":44}],44:[function(require,module,exports){
+},{"../components/Constants":11,"./BigWinState":40,"./IdleState":41,"./InitState":42,"./SpinStartState":43,"./SpinStopState":44,"./WinAnimationState":46}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4058,6 +4428,6 @@ var WinAnimationState = exports.WinAnimationState = function () {
     return WinAnimationState;
 }();
 
-},{"../AppModel":3,"../AppProxy":4,"../components/Constants":10,"./StateMachine":43}]},{},[1])
+},{"../AppModel":3,"../AppProxy":4,"../components/Constants":11,"./StateMachine":45}]},{},[1])
 
 //# sourceMappingURL=build.js.map

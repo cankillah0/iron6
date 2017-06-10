@@ -23,6 +23,11 @@ export class SpinButton extends Button {
                 this.setVisible(true);
                 break;
             }
+            case (Constants.BIG_WIN_STATE):{
+                this.setVisible(true);
+                this.setActive(false);
+                break;
+            }
             case (Constants.WIN_ANIMATION_STATE):{
                 this.setVisible(true);
                 this.setActive(true);

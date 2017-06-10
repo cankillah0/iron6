@@ -15,6 +15,7 @@ export class AppProxy {
         this.sparkles = null;
         this.ironDudes = null;
         this.frames = null;
+        this.bigwin = null;
 
         this.assetsLoadedSignal = new signals.Signal();
         this.immediateStopSpinSignal = new signals.Signal();

@@ -17,6 +17,7 @@ Constants.DUDES_TIME = 3000;
 Constants.JOINT_ADD_TIME = 2000;
 Constants.LINE_DEF_DELAY = 3000;
 Constants.LINE_SHORT_DELAY = 2000;
+Constants.BIG_WIN_TIME = 3000;
 Constants.MAX_FROZEN_COUNT = 4;
 Constants.ANIMATION_DURATION_MAP =
     [1,1,1,1,1,1,1.55,1.3,2.05,1.05];
@@ -26,4 +27,5 @@ Constants.IDLE_STATE = "IdleState";
 Constants.SPIN_START_STATE = "SpinStartState";
 Constants.SPIN_STOP_STATE = "SpinStopState";
 Constants.WIN_ANIMATION_STATE = "WinAnimationState";
+Constants.BIG_WIN_STATE = "BigWinState";
 

@@ -11,12 +11,15 @@ export class Renderer{
     initialize(){
 
         var canvas = document.getElementById('canvas');
-        this.renderer = PIXI.autoDetectRenderer(1262, 760, canvas);
-        document.body.appendChild(this.renderer.view);
-        this.renderer.view.style.position = 'absolute';
-        this.renderer.view.style.left = '50%';
-        this.renderer.view.style.top = '50%';
-        this.renderer.view.style.transform = 'translate3d( -50%, -50%, 0 )';
+        this.renderer = PIXI.autoDetectRenderer(1262, 760, {antialias: false, transparent: true, resolution: 1});//canvas, true);
+        //this.renderer = new PIXI.CanvasRenderer(1262, 760, canvas);
+       // document.body.appendChild(this.renderer.view);
+        canvas.appendChild(this.renderer.view);
+        //this.renderer.view.style.position = 'absolute';
+        //this.renderer.view.style.left = '50%';
+        //this.renderer.view.style.top = '50%';
+        //this.renderer.backgroundColor = 0x00abff;
+        //this.renderer.view.style.transform = 'translate3d( -50%, -50%, 0 )';
 
         this.ratio = 1262/760;
 
@@ -40,8 +43,8 @@ export class Renderer{
             var w = window.innerWidth;
             var h = window.innerWidth / this.ratio;
         }
-        this.renderer.view.style.width = w/1.2 + 'px';
-        this.renderer.view.style.height = h/1.2 + 'px';
+        this.renderer.view.style.width = w + 'px';
+        this.renderer.view.style.height = h + 'px';
     }
 
     animate(){
@@ -56,6 +59,12 @@ export class Renderer{
 
     get stage(){
         return this._stage;
+    }
+
+    dispose(){
+        document.body.removeChild(this.renderer.view);
+        this.renderer = null;
+        this._stage = null;
     }
 }
 

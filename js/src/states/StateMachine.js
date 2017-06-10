@@ -3,6 +3,7 @@ import {InitState} from './InitState';
 import {SpinStartState} from './SpinStartState';
 import {SpinStopState} from './SpinStopState';
 import {WinAnimationState} from './WinAnimationState';
+import {BigWinState} from './BigWinState';
 import {Constants} from '../components/Constants'
 
 export class StateMachine{
@@ -15,6 +16,7 @@ export class StateMachine{
         this.stateMap[Constants.SPIN_START_STATE] = new SpinStartState();
         this.stateMap[Constants.SPIN_STOP_STATE] = new SpinStopState();
         this.stateMap[Constants.WIN_ANIMATION_STATE] = new WinAnimationState();
+        this.stateMap[Constants.BIG_WIN_STATE] = new BigWinState();
     }
 
     initialize(){

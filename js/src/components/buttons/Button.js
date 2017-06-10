@@ -18,7 +18,7 @@ export class Button extends PIXI.extras.AnimatedSprite {
         this.interactive = true;
         this.on('mouseover', this.onMouseOver.bind(this));
         this.on('mouseout', this.onMouseOut.bind(this));
-        this.on('mousedown', this.onMouseDown.bind(this));
+        this.on('pointerdown', this.onMouseDown.bind(this));
         StateMachine.getInstance().stateChangeSignal.add(this.onStateChange.bind(this));
     }
 

@@ -9,19 +9,43 @@ export class AssetsManager{
 
     loadAtlas(){
         PIXI.loader
-            .add("img/bottom_panel.json")         
+            /*.add("img/bottom_panel.json")
             .add("img/icon_animations_1.json")
             .add("img/icon_animations_2.json")
             .add("img/icon_animations_3.json")
             .add("img/icon_animations_4.json")
             .add("img/back.json")
             .add("img/lightning.json")
-            .add("img/temp.json")
+            .add("img/frames.json")
+            .add("img/bigwin.json")*/
+            //http://localhost/img/back.png
+            .add("http://localhost/img/bottom_panel.json")
+            .add("http://localhost/img/icon_animations_1.json")
+            .add("http://localhost/img/icon_animations_2.json")
+            .add("http://localhost/img/icon_animations_3.json")
+            .add("http://localhost/img/icon_animations_4.json")
+            .add("http://localhost/img/back.json")
+            .add("http://localhost/img/lightning.json")
+            .add("http://localhost/img/frames.json")
+            .add("http://localhost/img/bigwin.json")
             .load(this.onAtlasLoaded);
     }
 
     onAtlasLoaded(){
         self.textures = Object.assign({},
+         PIXI.loader.resources["http://localhost/img/bottom_panel.json"].textures,
+         PIXI.loader.resources["http://localhost/img/icon_animations_1.json"].textures,
+         PIXI.loader.resources["http://localhost/img/icon_animations_2.json"].textures,
+         PIXI.loader.resources["http://localhost/img/icon_animations_3.json"].textures,
+         PIXI.loader.resources["http://localhost/img/icon_animations_4.json"].textures,
+         PIXI.loader.resources["http://localhost/img/back.json"].textures,
+         PIXI.loader.resources["http://localhost/img/lightning.json"].textures,
+         PIXI.loader.resources["http://localhost/img/frames.json"].textures,
+         PIXI.loader.resources["http://localhost/img/bigwin.json"].textures
+        );
+
+
+        /*self.textures = Object.assign({},
             PIXI.loader.resources["img/bottom_panel.json"].textures,
             PIXI.loader.resources["img/icon_animations_1.json"].textures,
             PIXI.loader.resources["img/icon_animations_2.json"].textures,
@@ -29,12 +53,13 @@ export class AssetsManager{
             PIXI.loader.resources["img/icon_animations_4.json"].textures,
             PIXI.loader.resources["img/back.json"].textures,
             PIXI.loader.resources["img/lightning.json"].textures,
-            PIXI.loader.resources["img/temp.json"].textures,
+            PIXI.loader.resources["img/frames.json"].textures,
+            PIXI.loader.resources["img/bigwin.json"].textures
            // PIXI.loader.resources["img/dude_1_1.json"].textures,
             //PIXI.loader.resources["img/dude_1_2.json"].textures,
             //PIXI.loader.resources["img/dude_2_1.json"].textures,
             //PIXI.loader.resources["img/dude_2_2.json"].textures
-        );
+        );*/
 
         AppProxy.getInstance().assetsLoadedSignal.dispatch();
     }
@@ -82,6 +107,17 @@ export class AssetsManager{
         while (self.textures.hasOwnProperty(name)){
             list.push(self.textures[name]);
             name = "frame (" + ++i +").png";
+        }
+        return list;
+    }
+
+    getBigWinAnimation(){
+        let list = [];
+        let i = 0;
+        let name = "bigwin (" + i + ").png";
+        while (self.textures.hasOwnProperty(name)){
+            list.push(self.textures[name]);
+            name = "bigwin (" + ++i +").png";
         }
         return list;
     }
@@ -202,6 +238,27 @@ export class AssetsManager{
 
     getTotalBetBackgroundTexture(){
         return self.textures["totalbet_panel.png"];
+    }
+
+    getSlideDefaultTexture(){
+        return self.textures["slide_default.png"];
+    }
+
+    getSlideActiveTexture(){
+        return self.textures["slide_active.png"];
+    }
+
+    getSlideDisabledTexture(){
+        return self.textures["slide_disabled.png"];
+    }
+
+    getSlideButtonTexture(){
+        return [
+            self.textures["slide_button.png"],
+            self.textures["slide_button.png"],
+            self.textures["slide_button.png"],
+            self.textures["slide_button.png"]
+        ]
     }
 }
 

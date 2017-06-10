@@ -4,6 +4,8 @@
 import {DisplayObject} from './../core/DisplayObject';
 import {AssetsManager} from './AssetsManager';
 import {AppModel} from './../AppModel';
+import {StateMachine} from './../states/StateMachine';
+import {Constants} from './Constants';
 
 export class BetPanel extends DisplayObject{
     constructor(){
@@ -20,12 +22,13 @@ export class BetPanel extends DisplayObject{
         this.lineText1 = this.getText(22);
         this.lineText1 .y += -15;
         this.lineText1 .x += -68;
+        this.lineText1.text = AppModel.getInstance().linesCount;
         this.addChild(this.lineText1);
 
         this.lineText2 = this.getText(22);
         this.lineText2 .y += -15;
         this.lineText2 .x += -68 + 112;
-        this.lineText2.text = "1";
+        this.lineText2.text = AppModel.getInstance().freezeValue;
         this.addChild(this.lineText2);
 
 
@@ -42,11 +45,33 @@ export class BetPanel extends DisplayObject{
         AppModel.getInstance().reelsFrozenUpdateSignal.add(
             this.onReelsFrozenUpdate.bind(this));
 
+        AppModel.getInstance().linesCountUpdateSignal.add(
+            this.onLinesCountUpdate.bind(this));
+
+        StateMachine.getInstance().stateChangeSignal.add(
+            this.onStateChange.bind(this));
+
         this.onReelsFrozenUpdate();
+    }
+
+    onStateChange(state){
+        switch (state.getName()){
+            case (Constants.BIG_WIN_STATE):
+            case (Constants.IDLE_STATE):
+            case (Constants.WIN_ANIMATION_STATE):{
+                this.onReelsFrozenUpdate();
+                break;
+            }
+        }
+    }
+
+    onLinesCountUpdate(value){
+        this.lineText1.text = value;
     }
 
     onReelsFrozenUpdate(){
         this.betText.text = AppModel.getInstance().getSpinPrice();
+        this.lineText2.text = AppModel.getInstance().freezeValue;
     }
 
     getText(fontSize){

@@ -1,5 +1,6 @@
 import {ServiceProxy} from './components/ServiceProxy';
 import {Constants} from './components/Constants';
+import {StateMachine} from './states/StateMachine';
 
 
 export class AppModel{
@@ -8,14 +9,32 @@ export class AppModel{
         this.reelsFrozen = [false,false,false,false,false,false];
         this.freezable = [true, true, true, true, true, true];
         this.reelsJoint = [];
-        this.combination = this.service.localCombination;
+        this.combination = [];
         this.balance = 10000;
+        this.linesCount = 239;
 
         this.spinReceivedSignal = new signals.Signal();
         this.initReceivedSignal = new signals.Signal();
         this.balanceUpdateSignal = new signals.Signal();
+        this.linesCountUpdateSignal = new signals.Signal();
         this.reelsFrozenUpdateSignal = new signals.Signal();
+        this.reelsFrozenExceedSignal = new signals.Signal();
+
+        StateMachine.getInstance().stateChangeSignal.add(this.onStateChange.bind(this));
     }
+
+    onStateChange(state){
+        switch (state.getName()){
+            case (Constants.BIG_WIN_STATE):
+            case (Constants.IDLE_STATE):
+            case (Constants.WIN_ANIMATION_STATE):{
+                this.handleFreezeValue();
+                break;
+            }
+        }
+    }
+
+
 
     //-----------------------spin request-response handling-------------------------------//
     getSpinData(){
@@ -25,16 +44,20 @@ export class AppModel{
 
     getSpinRequestData() {
         var data = Object.create(null);
-        data.frozen = this.reelsFrozen;
+        data.frozen    = this.parseFreezable(this.reelsFrozen, 0);
+        data.sessionId = this.sessionId;
         return data;
     }
 
     onSpinResponseReceived(data){
         this.combination = data.combination;
         this.lines       = data.lines;
-        this.freezable   = data.freezable;
+        this.freezable   = this.parseFreezable(data.freezable, 1);
         this.reelsJoint  = data.joint;
         this.showDudes   = data.dudes;
+        this.freezeValue = data.freezevalue;
+        this.bigwin      = data.bigwin;
+        this.balance     = data.balance;
         this.spinReceivedSignal.dispatch();
     }
     //----------------------init request-response handling---------------------------------//
@@ -46,11 +69,47 @@ export class AppModel{
 
     onInitResponseReceived(data){
         this.combination = data.combination;
-        this.freezable   = data.freezable;
+        this.freezable   = this.parseFreezable(data.freezable, 1);
+        this.sessionId   = data.sessionId;
+        this.freezeValue = data.freezeValue;
+        this.balance     = data.balance;
         this.initReceivedSignal.dispatch();
     }
 
     //-------------------------------------------------------------------------------------//
+    handleFreezeValue(){
+        var value = this.freezeValue - this.getFrozenReelsCount();
+        if (value < 0){
+            this.dropFrozenReels();
+            this.reelsFrozenExceedSignal.dispatch();
+
+        } else {
+            this.freezeValue = value;
+            this.reelsFrozenUpdateSignal.dispatch();
+        }
+    }
+
+    parseFreezable(raw, direction){
+        let result = [];
+        if (direction == 1){
+            for (let i = 0; i < 6; i++){
+                if (raw.indexOf(i) < 0){
+                    result.push(false);
+                } else {
+                    result.push(true);
+                }
+            }
+        } else {
+            for (let i = 0; i < 6; i++){
+                if (raw[i]){
+                    result.push(i);
+                }
+            }
+        }
+        return result;
+    }
+
+
     splitFrozenCombination(combination){
         for (let i = 0; i < this.reelsFrozen.length; i++){
             if (this.reelsFrozen[i]){
@@ -62,6 +121,11 @@ export class AppModel{
 
     freezeReel(index, value){
         this.reelsFrozen[index] = value;
+        if (value){
+            this.freezeValue -= 1;
+        } else {
+            this.freezeValue += 1;
+        }
         this.reelsFrozenUpdateSignal.dispatch();
     }
 
@@ -103,8 +167,12 @@ export class AppModel{
         return time;
     }
 
+    updateLinesCount(value){
+        this.linesCount = value;
+        this.linesCountUpdateSignal.dispatch(value);
+    }
+
     updateBalance(){
-        this.balance += this.lines.length * 1000;
         this.balanceUpdateSignal.dispatch(this.balance);
     }
 

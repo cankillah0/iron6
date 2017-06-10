@@ -17,29 +17,45 @@ export class LightButton extends Button{
         this.clickSignal = new signals.Signal();
         this.setLocation();
 
-        StateMachine.getInstance().stateChangeSignal.add(
-            this.onStateChange.bind(this));
+        AppModel.getInstance().reelsFrozenExceedSignal.add(
+            this.onReelsFrozenExceeded.bind(this));
     }
 
     onStateChange(state){
         switch (state.getName()){
-            case (Constants.SPIN_START_STATE):{
-                this.lock();
-                break;
-            }
+            case (Constants.SPIN_START_STATE):
+            case (Constants.BIG_WIN_STATE):
             case (Constants.SPIN_STOP_STATE):{
                 this.lock();
                 break;
             }
             case (Constants.IDLE_STATE):
             case (Constants.WIN_ANIMATION_STATE):{
-                if (AppModel.getInstance().freezable[this.index]){
-                    this.unlock();
-                    this.onMouseOut();
-                }
+                this.handleUnlockState();
                 break;
             }
         }
+    }
+
+    handleUnlockState(){
+        if (AppModel.getInstance().freezeValue == 0) return;
+
+        let frozenCount = AppModel.getInstance().getFrozenReelsCount();
+        if (frozenCount == Constants.MAX_FROZEN_COUNT){
+            if (this.selected){
+                this.unlock();
+                this.onMouseOut();
+            }
+            return;
+        }
+        if (AppModel.getInstance().freezable[this.index]) {
+            this.unlock();
+            this.onMouseOut();
+        }
+    }
+
+    onReelsFrozenExceeded(){
+        this.selected = false;
     }
 
     setLocation(){

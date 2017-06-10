@@ -71,6 +71,7 @@ export class Lines extends DisplayObject{
     }
 
     onSliderValueUpdate(value){
+        AppModel.getInstance().updateLinesCount(value);
         //this.drawLine(AppModel.LINES_MAP[value]);
     }
 }

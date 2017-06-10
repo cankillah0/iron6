@@ -29,6 +29,10 @@ export class StopButton extends Button {
                 this.setActive(true);
                 break;
             }
+            case (Constants.BIG_WIN_STATE):{
+                this.setVisible(false);
+                break;
+            }
             case (Constants.IDLE_STATE):{
                 this.setVisible(false);
                 break;

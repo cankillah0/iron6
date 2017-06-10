@@ -11,19 +11,22 @@ import {Constants} from './Constants';
 export class Slider extends PIXI.Container{
     constructor(){
         super();
-        this.sliderHeight = 500;
-        this.value = 239;
-        this.locked = false;
         this.initialize();
     }
 
     initialize(){
-        this.button = new SliderButton(new AssetsManager().getSliderButtonTextures());
+        this.sliderHeight = 520;
+        this.defValue = 239;
+        this.value = this.defValue;
+        this.locked = false;
+
+        this.createSlideSprite();
+
+        this.button = new SliderButton(new AssetsManager().getSlideButtonTexture());
         this.addChild(this.button);
 
         this.graphics = new PIXI.Graphics();
         this.addChild(this.graphics);
-        this.redrawLine(false);
 
         this.button.clickSignal.add(this.onButtonClick.bind(this));
 
@@ -32,6 +35,24 @@ export class Slider extends PIXI.Container{
 
         StateMachine.getInstance().stateChangeSignal.add(
             this.onStateChange.bind(this));
+    }
+
+    createSlideSprite(){
+        let t1 = new AssetsManager().getSlideDefaultTexture();
+        this.downSprite = new PIXI.Sprite(t1);
+        this.downSprite.y = 162;
+        this.addChild(this.downSprite);
+
+        this.upSprite = new PIXI.Sprite(t1);
+        this.upSprite.scale.y = -1;
+        this.upSprite.y = 361;
+        this.addChild(this.upSprite);
+
+        this.spriteTextures = [
+            new AssetsManager().getSlideDefaultTexture(),
+            new AssetsManager().getSlideActiveTexture(),
+            new AssetsManager().getSlideDisabledTexture()
+        ];
     }
 
     onStateChange(state){
@@ -53,14 +74,10 @@ export class Slider extends PIXI.Container{
     }
 
     redrawLine(active, locked = false){
-        let color = active ? 0x9C8137 : 0x468DBC; //
-        if (locked) color = 0x6B7B86;
-        this.graphics.clear();
-        this.graphics.lineStyle(5, color);
-        this.graphics.drawCircle(20, this.button.height/2, 3,3);
-        this.graphics.drawCircle(20, this.sliderHeight, 3,3);
-        this.graphics.moveTo(20, this.button.height/2);
-        this.graphics.lineTo(20, this.sliderHeight);
+        let texture = active ? this.spriteTextures[1] : this.spriteTextures[0];
+        if (locked) texture = this.spriteTextures[2];
+        this.downSprite.texture = texture;
+        this.upSprite.texture = texture;
     }
 
     lock(){
@@ -107,10 +124,10 @@ export class Slider extends PIXI.Container{
     }
 
     setValue(){
-        let value = Math.round(239 * this.button.y/(this.sliderHeight-this.button.height/2));
-        //if (value == 0) value = 1;
+        let value = Math.round(this.defValue - this.defValue * this.button.y / (this.sliderHeight - this.button.height/2) );
         if (this.value != value){
             this.value = value;
+            if (this.value == 0) this.value = 1;
             this.valueUpdateSignal.dispatch(this.value);
         }
 
